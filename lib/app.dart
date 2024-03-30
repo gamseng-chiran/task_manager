@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:task_manager/presentation/utils/app_color.dart';
 
 import 'presentation/screens/splash_screen.dart';
@@ -12,9 +13,13 @@ class TaskManager extends StatefulWidget {
 class _TaskManagerState extends State<TaskManager> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       navigatorKey: TaskManager.navigatorKey,
-      theme: ThemeData(
+      theme: _themeData,
+      home: SplashScreen(),
+    );
+  }
+  final ThemeData _themeData= ThemeData(
         inputDecorationTheme: InputDecorationTheme(
                 fillColor: Colors.yellow,
                 filled: true,
@@ -46,8 +51,5 @@ class _TaskManagerState extends State<TaskManager> {
               textTheme: TextTheme(
                 titleLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.w600),
               )
-      ),
-      home: SplashScreen(),
-    );
-  }
+      );
 }
