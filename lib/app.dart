@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_manager/presentation/utils/app_color.dart';
 
+import 'controller_binder.dart';
 import 'presentation/screens/splash_screen.dart';
 
 class TaskManager extends StatefulWidget {
@@ -17,8 +18,10 @@ class _TaskManagerState extends State<TaskManager> {
       navigatorKey: TaskManager.navigatorKey,
       theme: _themeData,
       home: SplashScreen(),
+      initialBinding: ControllerBinder(),
     );
   }
+  
   final ThemeData _themeData= ThemeData(
         inputDecorationTheme: InputDecorationTheme(
                 fillColor: Colors.yellow,

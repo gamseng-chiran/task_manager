@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:task_manager/presentation/screens/auth/sign_in_screen.dart';
+import 'package:get/get.dart';
+import 'package:task_manager/presentation/screens/sign_in_screen.dart';
 
 import '../../widgets/background_widget.dart';
 
@@ -72,7 +73,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                   color: Colors.black54
                 ),),
                 TextButton(onPressed: (() {
-                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => SignInScreen()), (route) => false);
+                  Get.offAll(() => SignInScreen());
                 }), child: Text('Sign In'),),
               ],),
             ]),

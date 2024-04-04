@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:task_manager/data/service/network_caller.dart';
+import 'package:get/get.dart';
+import 'package:task_manager/presentation/controllers/cancel_task_controller.dart';
 import 'package:task_manager/presentation/widgets/background_widget.dart';
 import 'package:task_manager/presentation/widgets/profile_bar.dart';
 import 'package:task_manager/presentation/widgets/task_card.dart';
 
-import '../../data/model/task_list_wrapper.dart';
-import '../../data/model/utility/urls.dart';
 import '../widgets/empty_list_widget.dart';
-import '../widgets/snack_bar_message.dart';
 
 class CancelledTaskScreen extends StatefulWidget {
   const CancelledTaskScreen({super.key});
@@ -17,14 +15,14 @@ class CancelledTaskScreen extends StatefulWidget {
 }
 
 class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
-  bool _getAllCancelledTaskListInProgress =false;
-  TaskListWrapper _completedTaskListWrapper = TaskListWrapper();
-
   @override
   void initState() {
     // TODO: implement initState
-    _getAllCancelledTaskList();
     super.initState();
+      _getDataFromApi();
+  }
+  void _getDataFromApi(){
+    Get.find<CancelTaskController>().getCancelTaskList();
   }
   @override
   Widget build(BuildContext context) {
@@ -32,53 +30,37 @@ class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
       appBar: profilBar,
       body: BackgroundWidget(
         child: Expanded(child: 
-        Visibility(
-          visible: _getAllCancelledTaskListInProgress == false,
-          replacement: Center(
-            child: CircularProgressIndicator(),
-            ),
-          child: RefreshIndicator(
-            onRefresh: () async{
-              _getAllCancelledTaskList();
-            },
-            child: Visibility(
-              visible: _completedTaskListWrapper.taskList?.isNotEmpty ?? false,
-              replacement: EmptyListWidget(),
-              child: ListView.builder(
-                itemCount: _completedTaskListWrapper.taskList?.length ?? 0,
-                itemBuilder: (context, index) {
-                return taskCard(
-                  taskItem: (_completedTaskListWrapper.taskList![index]),
-                  refreshList:(){
-                    _getAllCancelledTaskList();
-                  }
-                );
-              }),
-            ),
-          ),
+        GetBuilder<CancelTaskController>(
+          builder: (cancelTaskController) {
+            return Visibility(
+              visible: cancelTaskController.inProgress == false,
+              replacement: Center(
+                child: CircularProgressIndicator(),
+                ),
+              child: RefreshIndicator(
+                onRefresh: () async{
+                  _getDataFromApi();
+                },
+                child: Visibility(
+                  visible: cancelTaskController.newTaskListWrapper.taskList?.isNotEmpty ?? false,
+                  replacement: EmptyListWidget(),
+                  child: ListView.builder(
+                    itemCount: cancelTaskController.newTaskListWrapper.taskList?.length ?? 0,
+                    itemBuilder: (context, index) {
+                    return taskCard(
+                      taskItem: (cancelTaskController.newTaskListWrapper.taskList![index]),
+                      refreshList:(){
+                        _getDataFromApi();
+                      }
+                    );
+                  }),
+                ),
+              ),
+            );
+          }
         ),
         ),
       ),
     );
-  }
-
-  Future<void> _getAllCancelledTaskList() async{
-    _getAllCancelledTaskListInProgress = true;
-    setState(() {
-    });
-    final response = await NetworkCaller.getRequest(Urls.cancelTaskList);
-    if (response.isSuccess) {
-      _completedTaskListWrapper= TaskListWrapper.fromJson(response.responseBody);
-      _getAllCancelledTaskListInProgress = false;
-      setState(() {});
-    } else {
-      _getAllCancelledTaskListInProgress = false;
-      setState(() {});
-      if (mounted) {
-        ShowSnackBarMeassage(context,
-            response.errorMessage ?? 'Get cancelled task list has been failed');
-      }
-      
-    }
   }
 }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:task_manager/presentation/screens/auth/set_password_screen.dart';
-import 'package:task_manager/presentation/screens/auth/sign_in_screen.dart';
+import 'package:task_manager/presentation/screens/sign_in_screen.dart';
 import 'package:task_manager/presentation/utils/app_color.dart';
 
 import '../../widgets/background_widget.dart';
@@ -69,7 +70,7 @@ class _PinVerification_ScreenState extends State<PinVerification_Screen> {
                 width: double.infinity,
                 child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => SetPasswordScreen()));
+                      Get.to(() => SetPasswordScreen());
                     },
                     child: Text('verify')),
               ),
@@ -84,7 +85,7 @@ class _PinVerification_ScreenState extends State<PinVerification_Screen> {
                   color: Colors.black54
                 ),),
                 TextButton(onPressed: (() {
-                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => SignInScreen()), (route) => false);
+                  Get.offAll(() => SignInScreen());
                 }), child: Text('Sign In'),),
               ],),
             ]),

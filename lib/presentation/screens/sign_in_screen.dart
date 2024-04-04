@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:task_manager/data/model/login_responce.dart';
-import 'package:task_manager/data/service/network_caller.dart';
-import 'package:task_manager/presentation/controllers/auth_controller.dart';
+import 'package:get/get.dart';
+import 'package:task_manager/presentation/controllers/signIn_controller.dart';
 import 'package:task_manager/presentation/screens/auth/email_verification_screen.dart';
-import 'package:task_manager/presentation/screens/auth/sign_up_screen.dart';
+import 'package:task_manager/presentation/screens/sign_up_screen.dart';
 import 'package:task_manager/presentation/screens/main_bottom_nav_screen.dart';
 import 'package:task_manager/presentation/widgets/background_widget.dart';
 import 'package:task_manager/presentation/widgets/snack_bar_message.dart';
 
-import '../../../data/model/response_object.dart';
-import '../../../data/model/utility/urls.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -22,7 +19,7 @@ class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController emailController=TextEditingController();
   final TextEditingController passwordController=TextEditingController();
   final GlobalKey<FormState> _formKey= GlobalKey<FormState>();
-  bool _isLogInProgress= false;
+  final SignInController _signInController = Get.find<SignInController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,18 +74,22 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
               SizedBox(
                 width: double.infinity,
-                child: Visibility(
-                  visible: _isLogInProgress==false,
-                  replacement: Center(
-                    child: CircularProgressIndicator()),
-                  child: ElevatedButton(
-                      onPressed: () {
-                        if(_formKey.currentState!.validate()){
-                          _signIn();
-                        }
-                        
-                      },
-                      child: Icon(Icons.arrow_circle_right_outlined)),
+                child: GetBuilder<SignInController>(
+                  builder: (signInController) {
+                    return Visibility(
+                      visible: signInController.inProgess==false,
+                      replacement: Center(
+                        child: CircularProgressIndicator()),
+                      child: ElevatedButton(
+                          onPressed: () {
+                            if(_formKey.currentState!.validate()){
+                              _signIn();
+                            }
+                            
+                          },
+                          child: Icon(Icons.arrow_circle_right_outlined)),
+                    );
+                  }
                 ),
               ),
               SizedBox(
@@ -97,7 +98,7 @@ class _SignInScreenState extends State<SignInScreen> {
               Center(
                 child: TextButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => EmailVerificationScreen()));
+                    Get.to(() => EmailVerificationScreen());
                   },
                   child: Text(
                     'Forgot Password',
@@ -117,7 +118,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   color: Colors.black54
                 ),),
                 TextButton(onPressed: (() {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpScreen()),);
+                  Get.to(() => SignUpScreen());
                 }), child: Text('Sign Up'),),
               ],),
             ]),
@@ -126,38 +127,18 @@ class _SignInScreenState extends State<SignInScreen> {
       ),
     ));
   }
+  
   Future<void> _signIn() async{
-    _isLogInProgress=true;
-    setState(() {
-      
-    });
-    Map<String, dynamic> inputParams={
-      'email':emailController.text.trim(),
-      'password':passwordController.text.trim()
-    };
-    final ResponseObject response=await NetworkCaller.postRequest(Urls.logIn, inputParams, fromSignin: true);
-
-    _isLogInProgress=false;
-    setState(() {
-      
-    });
-
-    if(response.isSuccess){
-      if(!mounted){
-        return;
-      }
-      LoginResponse loginResponse= LoginResponse.fromJson(response.responseBody);
-      
-      await AuthController.saveUserData(loginResponse.userData);
-      await AuthController.saveUserToken(loginResponse.token);
+    final result = await _signInController.signIn(emailController.text.trim(), 
+    passwordController.text);
+    if(result){
       if(mounted){
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-        builder: (context) => MainBottomNavScreen()), (route) => false);
+      Get.offAll(() => MainBottomNavScreen());
     }
     }
     else{
       if(mounted){
-        ShowSnackBarMeassage(context, response.errorMessage ?? 'Log in faled. Try again');
+        ShowSnackBarMeassage(context, _signInController.errorMessage);
       }
     }
   }

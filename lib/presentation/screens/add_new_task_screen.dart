@@ -1,8 +1,5 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
 import 'package:task_manager/data/model/utility/urls.dart';
 import 'package:task_manager/data/service/network_caller.dart';
 import 'package:task_manager/presentation/widgets/background_widget.dart';
@@ -27,6 +24,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
     return WillPopScope(
       onWillPop: () async{
         Navigator.pop(context, _shouldRefreshNewTaskList);
+        // Get.back(result: _shouldRefreshNewTaskList);
         return false;
       },
       child: Scaffold(

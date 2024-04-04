@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:task_manager/presentation/controllers/auth_controller.dart';
-import 'package:task_manager/presentation/screens/auth/sign_in_screen.dart';
+import 'package:task_manager/presentation/screens/sign_in_screen.dart';
 import 'package:task_manager/presentation/screens/main_bottom_nav_screen.dart';
 import 'package:task_manager/presentation/widgets/background_widget.dart';
 
@@ -26,12 +27,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (mounted){
       if(isLoggedIn){
-      Navigator.pushReplacement(context, 
-      MaterialPageRoute(builder: (context) => MainBottomNavScreen()),);
+      Get.off(() => MainBottomNavScreen());
     }
     else{
-      Navigator.pushReplacement(context, 
-      MaterialPageRoute(builder: (context) => SignInScreen()),);
+      Get.off(() => SignInScreen());
 
     }
     }

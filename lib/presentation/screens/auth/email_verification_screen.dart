@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:task_manager/presentation/screens/auth/pin_verification_screen.dart';
 
 import '../../widgets/background_widget.dart';
@@ -48,7 +49,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => PinVerification_Screen()));
+                      Get.to(() => PinVerification_Screen());
                     },
                     child: Icon(Icons.arrow_circle_right_outlined)),
               ),
@@ -63,7 +64,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                   color: Colors.black54
                 ),),
                 TextButton(onPressed: (() {
-                  Navigator.pop(context);
+                  Get.back();
                 }), child: Text('Sign In'),),
               ],),
             ]),
