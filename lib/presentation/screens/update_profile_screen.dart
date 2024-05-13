@@ -13,7 +13,6 @@ import 'package:task_manager/presentation/widgets/snack_bar_message.dart';
 import '../widgets/background_widget.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
-  // const UpdateProfileScreen({super.key});
   const UpdateProfileScreen({Key? key}) : super(key: key);
   static const String routeName = '/update_profile';
 
@@ -199,75 +198,3 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   }
 }
 
-
-
-
-  // @override
-  // void dispose() {
-  //   _emailController.dispose();
-  //   _FNController.dispose();
-  //   _LNController.dispose();
-  //   _passwordController.dispose();
-  //   _phoneController.dispose();
-  //   // TODO: implement dispose
-  //   super.dispose();
-  // }
-
-//   Future<void> pickImageFromGallery()async{
-//     ImagePicker imagePicker = ImagePicker();
-//     _pickedImage = await imagePicker.pickImage(source: ImageSource.gallery);
-//     setState(() {
-//     });
-//   }
-//   Future<void> _updateProfile() async{
-//     String? photo='';
-
-//     _updateProfileInProgress=true;
-//     setState() {
-//     };
-//     Map<String, dynamic> inputParams={
-//       'email' : _emailController.text.trim(),
-//       'firstName' : _FNController.text.trim(),
-//       'lastName' : _LNController.text.trim(),
-//       'mobile' : _phoneController.text.trim()
-//     };
-
-//     if(_passwordController.text.isNotEmpty){
-//       inputParams['password'] = _passwordController.text;
-//     }
-
-//     if(_pickedImage != null){
-//       List<int> bytes = File(_pickedImage!.path).readAsBytesSync();
-//       photo=base64Encode(bytes);
-//       inputParams['photo'] = photo;
-//     }
-
-//     final response= await NetworkCaller.postRequest(Urls.updateProfile, inputParams);
-//     _updateProfileInProgress = false;
-//     if(response.isSuccess){
-//       if(response.responseBody['status']== 'success'){
-//         UserData userData=UserData(
-//           email: _emailController.text, 
-//           firstName: _FNController.text.trim(), 
-//           lastName: _LNController.text.trim(), 
-//           mobile: _phoneController.text.trim(), 
-//           photo: photo,
-//           );
-//           await AuthController.saveUserData(userData);
-//       }
-//       if(mounted){
-//         Get.offAll(()=> MainBottomNavScreen());
-//       }
-//     }
-    
-//     else{
-//       if(mounted){
-//         return;
-//       }
-//       setState() {
-//     };
-//       ShowSnackBarMeassage(context, 
-//       'Update profile failed. Try again');
-//     }
-//   }
-// }
